@@ -1,3 +1,23 @@
+# This fork
+
+This fork is a hacked-together variant for the Cooler Master MasterKeys Pro L White.
+Only the EU/ISO variant has been tested, but untested code for the US variant is also in.
+
+The Pro L White uses only the value of the red LED. The green and blue values are ignored, but still
+required to be present in the USB protocol. This is rather convenient and means the core protocol
+is unchanged compared to the RGB variants.
+
+The Pro L White doesn't support the "color cycle" effect, and effect IDs were slightly changed
+as a result (they didn't just dummy it out). This fork hardcodes the Pro L White versions.
+
+I don't think this is merge-worthy in its current state, and I don't intend to invest any more
+work into this.
+
+If you aren't specifically using a Pro L White, you should
+[use the original libcmmk library](https://github.com/chmod222/libcmmk).
+
+# Original readme follows
+
 An unofficial implementation of the Masterkey Lighting API that can be used
 to programmatically control LEDs of Coolermaster Masterkey keyboards.
 
