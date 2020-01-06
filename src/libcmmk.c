@@ -41,9 +41,11 @@ static keyboard_layout const *keyboard_layouts[] = {
 	[CMMK_LAYOUT_US_S] = &layout_us_s,
 	[CMMK_LAYOUT_US_L] = &layout_us_l,
 	[CMMK_LAYOUT_US_MK750] = &layout_us_mk750,
+	[CMMK_LAYOUT_US_L_WHITE] = &layout_us_l, /* layout identical to RGB version */
 	[CMMK_LAYOUT_EU_S] = &layout_eu_s,
 	[CMMK_LAYOUT_EU_L] = &layout_eu_l,
 	[CMMK_LAYOUT_EU_MK750] = &layout_eu_mk750,
+	[CMMK_LAYOUT_EU_L_WHITE] = &layout_eu_l, /* layout identical to RGB version */
 };
 
 /* Some global definitions */
@@ -195,7 +197,8 @@ int cmmk_find_device(int *product)
 	static int supported_devices[] = {
 		CMMK_USB_MASTERKEYS_PRO_L,
 		CMMK_USB_MASTERKEYS_PRO_S,
-		CMMK_USB_MASTERKEYS_MK750
+		CMMK_USB_MASTERKEYS_MK750,
+		CMMK_USB_MASTERKEYS_PRO_L_WHITE,
 	};
 
 	libusb_context *context = NULL;
@@ -267,6 +270,7 @@ static int cmmk_try_determine_layout(struct cmmk *dev, int product)
 		case CMMK_USB_MASTERKEYS_PRO_L: device_model = CMMK_PRODUCT_MASTERKEYS_PRO_L; break;
 		case CMMK_USB_MASTERKEYS_PRO_S: device_model = CMMK_PRODUCT_MASTERKEYS_PRO_S; break;
 		case CMMK_USB_MASTERKEYS_MK750: device_model = CMMK_PRODUCT_MASTERKEYS_MK750; break;
+		case CMMK_USB_MASTERKEYS_PRO_L_WHITE: device_model = CMMK_PRODUCT_MASTERKEYS_PRO_L_WHITE; break;
 	}
 
 	if (general_layout == CMMK_LAYOUT_TYPE_ANSI) {
@@ -274,12 +278,14 @@ static int cmmk_try_determine_layout(struct cmmk *dev, int product)
 			case CMMK_PRODUCT_MASTERKEYS_PRO_L: return CMMK_LAYOUT_US_L;
 			case CMMK_PRODUCT_MASTERKEYS_PRO_S: return CMMK_LAYOUT_US_S;
 			case CMMK_PRODUCT_MASTERKEYS_MK750: return CMMK_LAYOUT_US_MK750;
+			case CMMK_PRODUCT_MASTERKEYS_PRO_L_WHITE: return CMMK_LAYOUT_US_L_WHITE;
 		}
 	} else {
 		switch (device_model) {
 			case CMMK_PRODUCT_MASTERKEYS_PRO_L: return CMMK_LAYOUT_EU_L;
 			case CMMK_PRODUCT_MASTERKEYS_PRO_S: return CMMK_LAYOUT_EU_S;
 			case CMMK_PRODUCT_MASTERKEYS_MK750: return CMMK_LAYOUT_EU_MK750;
+			case CMMK_PRODUCT_MASTERKEYS_PRO_L_WHITE: return CMMK_LAYOUT_EU_L_WHITE;
 		}
 	}
 
@@ -411,6 +417,10 @@ enum cmmk_product_type cmmk_get_device_model(struct cmmk *dev)
 	case CMMK_LAYOUT_US_MK750:
 	case CMMK_LAYOUT_EU_MK750:
 		return CMMK_PRODUCT_MASTERKEYS_MK750;
+
+	case CMMK_LAYOUT_US_L_WHITE:
+	case CMMK_LAYOUT_EU_L_WHITE:
+		return CMMK_PRODUCT_MASTERKEYS_PRO_L_WHITE;
 	}
 
 	assert(0 && "unreachable");
@@ -422,11 +432,13 @@ enum cmmk_layout_type cmmk_get_device_layout(struct cmmk *dev)
 	case CMMK_LAYOUT_US_S:
 	case CMMK_LAYOUT_US_L:
 	case CMMK_LAYOUT_US_MK750:
+	case CMMK_LAYOUT_US_L_WHITE:
 		return CMMK_LAYOUT_TYPE_ANSI;
 
 	case CMMK_LAYOUT_EU_S:
 	case CMMK_LAYOUT_EU_L:
 	case CMMK_LAYOUT_EU_MK750:
+	case CMMK_LAYOUT_EU_L_WHITE:
 		return CMMK_LAYOUT_TYPE_ISO;
 	}
 
